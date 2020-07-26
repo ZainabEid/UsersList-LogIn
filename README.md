@@ -1,2 +1,5 @@
 # UsersList-LogIn
-php web page list,add edit users data, developed in 2 different way; procedure, and object oriented with object relational mapping
+a php web page that List,Add, Edit, and delete users data.
+the web application is developed in 2 different way;
+  - procedure
+  - object oriented with object relational mapping
