@@ -7,11 +7,16 @@
         /**
          * Constructor
          */
-        public function _constructor(array $config){
+        public function _construct(array $config){
             if(count($config)!==5){
                 throw new InvalidArgumentException('invalid number of argumanet parameters');
             }
-            $this->_config =$config;
+            $this->_config = $config;
+           
+        }
+
+        public function returnConfig(){
+            return $this->_config;
         }
 
         /**
@@ -19,14 +24,16 @@
          */
         public function connect(){
             //connect only once : single tone design pattern >> one instence of connection
-            if ($this-> _link == null){
-                List($hsot,$user,$password,$database,$port)=$this->_config;
-                if(! $this->_link = @mysqli_connect($host,$user,$password,$database,$port)){
+            if ($this->_link === null){
+                List($host,$user,$password,$database,$port) = $this->_config;
+                echo "the host is ".$host;
+                if( !$this->_link = @mysqli_connect($host,$user,$password,$database,$port)){
                     throw new RuntimeException('Error Connecting to the server: ').mysqli_connect_error();
                 }
-                unset($hsot,$user,$password,$database,$port);
+                unset($host,$user,$password,$database,$port);
             }
-            return $this->_link;
+            //return $this->_link;
+            return true;
         }
 
         /**
@@ -34,7 +41,7 @@
          */
         public function query($query){
             try{
-                if(is_string($query) || empty($query) ){
+                if( !is_string($query) || empty($query) ){
                     throw new RuntimeException('the specified query is not valid');
                 }
                 //lazy connect to mysql

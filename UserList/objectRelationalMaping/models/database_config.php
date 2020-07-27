@@ -1,6 +1,6 @@
 <?php
     //Database Configuaraton Array (server,username,password,DBname,portnumber)
-    $_config = array(
+    $config = array(
         "localhost",
         "root",
         "",

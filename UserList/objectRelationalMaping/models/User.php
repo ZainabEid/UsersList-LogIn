@@ -10,7 +10,7 @@ class User extends MysqlAdapter {
         // add from the database configuration
         global $config;
         // call the parent consrtuctor
-        parent :: _construct($config);
+        parent::_construct($config);
     }
 
     /**
