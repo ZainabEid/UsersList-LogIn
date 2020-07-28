@@ -23,13 +23,9 @@
             //connect only once : single tone design pattern >> one instence of connection
             if ($this->_link === null){
                 List($host,$user,$password,$database,$port) = $this->_config;
-                try{
                     if( !$this->_link = @mysqli_connect($host,$user,$password,$database,$port)){
                          throw new RuntimeException('Error Connecting to the server: '.mysqli_connect_error());
                     }
-                }catch(RuntimeException $e){
-                    echo 'catch exception mysql connecting error ';
-                }
                 unset($host,$user,$password,$database,$port);
             }
             //return $this->_link;
@@ -40,19 +36,17 @@
          * Execute Specific query
          */
         public function query($query){
-            try{
+            
                 if( !is_string($query) || empty($query) ){
                     throw new RuntimeException('the specified query is not valid');
                 }
                 //lazy connect to mysql
                 $this->connect();
-                if ($this->_result = mysqli_query($this->_link,$query)){
-                    throw new RuntimeException('Error excecuting the specified query: ').$query.mysqli_error($this->_link);
+                if ( $this->_result = mysqli_query( $this->_link , $query )){
+                    throw new RuntimeException('Error excecuting the specified query: '.$query.mysqli_error($this->_link));
                 }
-                return $this->_result;
-            }catch(RuntimeException $e){
-                echo 'the specified query is not valid OR Error excecuting the specified query: ';
-            }
+                echo 'qurey function is returned: '.$this->countrows();
+                return $this->_result; 
             
         }
 
@@ -131,6 +125,7 @@
                     $this->freeResult();
                 }
                 return $row;
+              
             }
             return false;
         }
