@@ -18,7 +18,7 @@ require 'models/User.php';
    
     //search by the name or email 
     if (isset($_GET['search'])){
-        $users->searchUsers($_GET['search']);
+        $users = $user->searchUsers($_GET['search']);
     }
     
     
