@@ -6,11 +6,11 @@ class User extends MysqlAdapter {
     // set the table name
     private $_table= 'users';
     
-    public function _construct(){
+    public function __construct(){
         // add from the database configuration
         global $config;
         // call the parent consrtuctor
-        parent::_construct($config);
+        parent::__construct($config);
     }
 
     /**

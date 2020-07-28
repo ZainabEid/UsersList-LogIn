@@ -1,10 +1,8 @@
 <?php
 
-//require 'models/User.php';
-require 'models/MysqlAdapter.php';
-require 'models/database_config.php';
+require 'models/User.php';
 
-$conn_ok=false;
+    $conn_ok=false;
     //WElCOM user name;
     session_start();
 
@@ -14,33 +12,14 @@ $conn_ok=false;
         header('Location: views/login.php');
     }
 
+    $user = new User();
+    $users = $user->getUsers();
 
-    $sql=new MysqlAdapter($config);
-    $returned_config  = $sql->returnConfig();
-    List($host,$user,$password,$database,$port) =$returned_config;
-    echo 'the host name is : '.$host;
-    
-    if($sql->connect()){
-        $conn_ok=true;  
-        $sql->disconnect();
-        echo 'connection ok';
-
-    }else echo 'connection Error';
-/*
-    if($conn_ok){
-        $user = new User();
-        $users = $user->getUsers();
-
-    }*/
-   // $user = new User();
-    //$users = $user->getUsers();
-
+   
     //search by the name or email 
     if (isset($_GET['search'])){
         $users->searchUsers($_GET['search']);
     }
-    
-
     
     
 
@@ -74,7 +53,6 @@ $conn_ok=false;
             </thead>
             <tbody>
                 <?php
-               if($conn_ok==false){
                 //loop on the rowset to get rows data
                 foreach($users as $row){
                 ?>
@@ -97,8 +75,6 @@ $conn_ok=false;
                     </tr>
                 <?php
                  //closing foreach loop
-                }}else {
-                    echo 'connection error';
                 }
                 ?>
             </tbody>

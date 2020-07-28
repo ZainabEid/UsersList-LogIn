@@ -1,13 +1,13 @@
 <?php
     class MysqlAdapter{
-        protected $_config =array();
+        protected $_config ; // the list dosent assined of $_config is declared as array!!
         protected $_link;
         protected $_result;
 
         /**
          * Constructor
          */
-        public function _construct(array $config){
+        public function __construct(array $config){
             if(count($config)!==5){
                 throw new InvalidArgumentException('invalid number of argumanet parameters');
             }
@@ -15,10 +15,7 @@
            
         }
 
-        public function returnConfig(){
-            return $this->_config;
-        }
-
+        
         /**
          * Connect to Mysql
          */
@@ -26,9 +23,12 @@
             //connect only once : single tone design pattern >> one instence of connection
             if ($this->_link === null){
                 List($host,$user,$password,$database,$port) = $this->_config;
-                echo "the host is ".$host;
-                if( !$this->_link = @mysqli_connect($host,$user,$password,$database,$port)){
-                    throw new RuntimeException('Error Connecting to the server: ').mysqli_connect_error();
+                try{
+                    if( !$this->_link = @mysqli_connect($host,$user,$password,$database,$port)){
+                         throw new RuntimeException('Error Connecting to the server: '.mysqli_connect_error());
+                    }
+                }catch(RuntimeException $e){
+                    echo 'catch exception mysql connecting error ';
                 }
                 unset($host,$user,$password,$database,$port);
             }
@@ -159,7 +159,7 @@
          *  Get the Count rows
          */
         public function countRows(){
-            return $this->_result !== null ? mysqli_num_rows($this->_result) :0;
+            return ($this->_result !== null) ? mysqli_num_rows($this->_result) :0;
         }
 
         /**
