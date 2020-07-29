@@ -67,8 +67,8 @@ class User extends MysqlAdapter {
      * @param string $keyword 
      * @return arrat returns every user row as array of accociative array
      */
-    public function searchUsers($keyword){// WORNING: the select statment syntax error need to be fix !!
-        return $this->select($this->_table, " name LIKE '%".$keyword."%' OR mail LIKE '%.$keyword.%'");
+    public function searchUsers($keyword){
+         $this->select($this->_table, " name LIKE '%".$keyword."%' OR mail LIKE '%.$keyword.%'");
         return $this->fetchall();
     }
 }

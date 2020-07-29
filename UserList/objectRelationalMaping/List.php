@@ -54,7 +54,7 @@ require 'models/User.php';
             <tbody>
                 <?php
                 //loop on the rowset to get rows data
-                foreach($users as $row){
+                foreach( $users as $row ){
                 ?>
                     <tr>
                         <td> <?= $row['id']  ?> </td>
