@@ -70,7 +70,7 @@ require 'models/User.php';
                             <?= "uploads/".$row['avatar'] ?>
                         </td>
                         <td> <?= ($row['admin']) ? 'Yes' : 'No'  ?> </td>
-                        <td> <a href="edit.php?id=<?=$row['id']?>">Edit</a> | <a href="delete.php?id=<?=$row['id']?>">Delete</a> </td>
+                        <td> <a href="views/edit.php?id=<?=$row['id']?>">Edit</a> | <a href="views/delete.php?id=<?=$row['id']?>">Delete</a> </td>
 
                     </tr>
                 <?php

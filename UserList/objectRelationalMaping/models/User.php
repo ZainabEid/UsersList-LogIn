@@ -33,6 +33,11 @@ class User extends MysqlAdapter {
         return $this->fetch();
     }
 
+    public function loginUser($mail,$password){
+        $this->select($this->_table, " mail = '".$mail."' AND password='".$password, "*", "", 1);
+        return $this->fetch();
+    }
+
     
     /**
      * Add New User: 
@@ -50,7 +55,7 @@ class User extends MysqlAdapter {
      * @return int returns number of affected rows
      */
     public function updateUser($user_data,$user_id){
-       return $this->ubdate($this->_table,$user_data, 'id = '.$user_id);
+       return $this->update($this->_table,$user_data, 'id = '.$user_id);
     }
 
     /**
@@ -65,7 +70,7 @@ class User extends MysqlAdapter {
      /**
      * Search Existing users: 
      * @param string $keyword 
-     * @return arrat returns every user row as array of accociative array
+     * @return array returns every user row as array of accociative array
      */
     public function searchUsers($keyword){
          $this->select($this->_table, " name LIKE '%".$keyword."%' OR mail LIKE '%.$keyword.%'");

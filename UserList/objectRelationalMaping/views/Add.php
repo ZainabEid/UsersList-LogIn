@@ -1,5 +1,6 @@
 <!-- 2-Validation -->
 <?php
+require '../models/User.php';
     $error_arr=array();
     if( $_SERVER['REQUEST_METHOD'] == 'POST'){
 
@@ -12,26 +13,18 @@
         if (! (isset($_POST['password']) && strlen($_POST['password']) > 5 ) ){
             $error_arr[]="password";
         }
-    
+                
         //3-Connecting to DataBas
 
         if(!$error_arr){
             $err='';
-            // connect ot DB
-            $conn=mysqli_connect('localhost','root','','blog', 3308);
-            if ( !$conn){
-                echo "there is an error...   ".mysqli_connect_error();
-                exit;
-            }
-            
-            // Escape any special charater to avoid any BD injuction
-            $name= mysqli_escape_string($conn,$_POST['name']);
-            $mail= mysqli_escape_string($conn,$_POST['mail']);
-            $password= sha1($_POST['password']);
+
+            //read user data from the form:
+            $name = $_POST['name'];
             $admin= ( isset($_POST['admin']) )? 1 : 0;
 
             //Upload FILE here:
-            $uploads_dir= 'uploads/';
+            $uploads_dir= '../../uploads/';
             $avatar='';
             $target_file_name='';
             if( $_FILES['avatar']['error'] == 0 ){
@@ -42,25 +35,27 @@
 
                 if(move_uploaded_file($tmp_name,"$uploads_dir/$target_file_name")){
                     $err='No Error';
-                }
-                $err='Error';
+                }lse{$err='Error'};
             }else{
                 echo 'file can not be uploaded';
                 
                 exit;
             }
+            
+            $user_data= array(
+                    "name" => $name,
+                    "mail" => $_POST['mail'],
+                    "password" => $_POST['password'],
+                    "avatar" => $target_file_name,
+                    "admin" => $admin);
 
-        
-            //insert statement
-            $query="INSERT INTO users ( name, mail, password, avatar, admin) VALUES ('".$name."','".$mail."','".$password."','".$target_file_name."','".$admin."')";
-            if(mysqli_query($conn,$query)){
-                header("Location: List.php?file=".$err);
+            $user = new User();
+            $user_id = $user->addUser($user_data);
+
+            if(isset($user_id)){
+                header("Location: ../List.php?file=".$err);
                 exit;
-            }else{
-                echo mysqli_error($conn);
             }
-            mysqli_close($conn);
-        
         }
     }
         
@@ -123,14 +118,4 @@
     </body>
 </html>
 
-
-
-
-
-<!-- e -->
-
-<?php
-
-
-?>
 

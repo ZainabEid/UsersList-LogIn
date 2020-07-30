@@ -1,19 +1,13 @@
 <?php
+
+require '../models/User.php';
     // 1- define error arrary
     $error_arr=array();
-
-    //2-Connecting to DataBas
-    $conn=mysqli_connect('localhost','root','','blog', 3308);
-    if ( !$conn){
-        echo "there is an error...   ".mysqli_connect_error();
-        exit;
-    }
-
-    //3- Display the user data:
     $id = filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-    $select = "SELECT * FROM users WHERE users.id =".$id." LIMIT 1";
-    $result = mysqli_query($conn,$select);
-    $row = mysqli_fetch_assoc($result);
+
+    $user = new User();
+    $row = $user->getUser($id);
+    
 
     //4- Executing the update:
     if( $_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -26,23 +20,51 @@
         }
 
         if(!$error_arr){
-            // Escape any special charater to avoid any BD injuction
-            $name= mysqli_escape_string($conn,$_POST['name']);
-            $mail= mysqli_escape_string($conn,$_POST['mail']);
+
+            
+            $name= $_POST['name'];
+            $mail= $_POST['mail'];
             $password= sha1($_POST['password']);
             $admin= ( isset($_POST['admin']) )? 1 : 0;
 
+            //Upload FILE here:
+            $uploads_dir= '../../uploads/';
+            $avatar='';
+            $target_file_name='';
+            if( $_FILES['avatar']['error'] == 0 ){
+
+                $tmp_name= $_FILES['avatar']['tmp_name'];
+                $avatar = basename($_FILES['avatar']['name']);
+                $target_file_name = $name.$avatar;
+
+                if(move_uploaded_file($tmp_name,"$uploads_dir/$target_file_name")){
+                    $err='No Error';
+                }
+            }else{
+                echo 'file can not be uploaded';
+                
+                exit;
+            }
+
+
+           
+            $user_data = array(
+                "name" => $name,
+                "mail" => $mail,
+                "password" => $password,
+                "avatar" => $target_file_name,
+                "admin" => $admin
+            
+            );
+
      //5- Execution Update:   
-            $query = "UPDATE users  
-                      SET name ='".$name."' , mail = '".$mail."', password = '".$password."', admin = '".$admin."' 
-                      WHERE users.id = ".$id;
-            if(mysqli_query($conn,$query)){
-                header("Location: List.php");
+            
+            if($user->updateUser($user_data,$id)){
+                header("Location: ../List.php");
                 exit;
             }else{
-                echo "UPDATE ERROR ...  ".mysqli_error($conn);
+                echo "UPDATE ERROR ...  ";
             }
-            mysqli_close($conn);
         
         }
     }
@@ -96,8 +118,12 @@
             }
         ?>
         <br>
+        
+        <label for="avatar">Add Avatar</label>
+        <input type="file" name="avatar" id="avatar">
+        <br>
 
-        <label for="admin">Admin <?= $row['admin']?> </label>
+        <label for="admin">Admin </label>
         <input type="checkbox" name="admin" id="" 
             <?= ($row['admin'] == 1) ? 'checked' : '' ?>
         />

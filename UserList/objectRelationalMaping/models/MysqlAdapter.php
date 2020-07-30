@@ -68,9 +68,9 @@
         public function insert($table, array $data){
             $fields = implode(',',array_keys($data));
             $values = implode(',', array_map(array($this,'quoteValue'), array_values($data) ) );
-            $query = 'INSERT INTO'.$table.'('.$fields.')'.' VALUES ('.$values.')';
+            $query = 'INSERT INTO '.$table.' ('.$fields.')'.' VALUES ('.$values.')';
             $this->query($query);
-            return $this->getInsertId();
+            return $this->getIndertedId();
         }
 
         /**
@@ -80,10 +80,10 @@
             
             $set = array();
             foreach($data as $field => $value){
-                $set[]=$field.'='.$this->quoteValue($value);
+                $set[] = $field.'='.$this->quoteValue($value);
             }
             $set= implode(',', $set);
-            $query = 'UPDATE'.$table.' SET '.$set.(($where)? ' WHERE '.$where :'');
+            $query = 'UPDATE '.$table.' SET '.$set.(($where)? ' WHERE '.$where :'');
             $this->query($query);
             return $this->getAffectedRows();
         }
@@ -93,9 +93,7 @@
          */
         public function delete($table, $where=''){
             
-            
-            $set= implode(',', $set);
-            $query = 'DELETE FROM'.$table
+            $query = 'DELETE FROM '.$table
                     .(($where) ? ' WHERE '.$where:'' );
             $this->query($query);
             return $this->getAffectedRows();
@@ -145,7 +143,7 @@
         /**
          *  Get the inserted id
          */
-        public function getIndertId(){
+        public function getIndertedId(){
             return $this->_link !== null ? mysqli_insert_id($this->_link): null;
         }
 
