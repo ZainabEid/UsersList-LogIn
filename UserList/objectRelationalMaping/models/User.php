@@ -34,7 +34,7 @@ class User extends MysqlAdapter {
     }
 
     public function loginUser($mail,$password){
-        $this->select($this->_table, " mail = '".$mail."' AND password='".$password, "*", "", 1);
+        $this->select($this->_table, " mail = '".$mail."' AND password='".$password."'", "*", "", 1);
         return $this->fetch();
     }
 

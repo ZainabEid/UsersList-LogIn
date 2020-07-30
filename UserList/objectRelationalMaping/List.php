@@ -7,7 +7,7 @@ require 'models/User.php';
     session_start();
 
     if(isset($_SESSION['id'])){
-        echo '<p> Wlecome '.$_SESSION['mail'].' <a href="logout.php" > Log Out </a> </p>';
+        echo '<p> Wlecome '.$_SESSION['mail'].' <a href="views/logout.php" > Log Out </a> </p>';
     }else{
         header('Location: views/login.php');
     }

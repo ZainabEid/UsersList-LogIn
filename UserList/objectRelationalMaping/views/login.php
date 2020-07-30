@@ -1,10 +1,12 @@
 <?php
-require 'models/User.php';
+require '../models/User.php';
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] =='POST'){
+    $mail =$_POST['mail'];
+    $password=sha1($_POST['password']);
     $user = new user();
-    $row = $user->loginUser($_POST['mail'],$_POST['password']);
+    $row = $user->loginUser($mail,$password);
 
     if( isset($row) ){
         $_SESSION['mail']=$row['mail'];
